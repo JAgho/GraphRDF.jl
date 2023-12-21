@@ -24,20 +24,18 @@ const R2 = SVector{2, Float64}
 function conv_edges(a::Tuple{R2, R2}, b::Tuple{R2, R2}, r::R2; N = 100, rmax = 1, res = zeros())
     x = [a[1] ⋅ r, a[2] ⋅ r]
     y = [b[1] ⋅ r, b[2] ⋅ r]
-    
-    x_left = x[1] < x[2] ? (1, 2) : (2, 1)
-    y_left = y[1] < y[2] ? (1, 2) : (2, 1)
-    sx = x[x_left]
+    x_left = x[1] < x[2] ? (1, 2) : (2, 1) # get sort indices for dot products
+    y_left = y[1] < y[2] ? (1, 2) : (2, 1) 
+    sx = x[x_left] # create temporary sorted vars
     sy = y[y_left]
-    left = min(x[x_left[1]], y[y_left[1]])
-    x .-= left
-    y .-= left
-    
-
+    sl = sx[1] - sx[2] > sy[1] - sy[2] ? (sy, sx) : (sx, sy) #order from smallest top hat to largest
+    return sl[2][1] - sl[1][2], sl[2][1] - sl[1][2], sl[2][2] - sl[1][1]
 end
 
-
-
+function trap2hist(trap, h, rmax, N, res=zeros(N))
+    grad = h/(trap[1] - trap[2])
+    l1 = floor(trap[1])
+end
 
 
 
